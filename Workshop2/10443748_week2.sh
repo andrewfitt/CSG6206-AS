@@ -39,18 +39,6 @@ function grayOrColour() {
 		$Colour)
 			echo "Colour"
 			;;
-		"Gray")
-			echo "Grayscale"
-			;;
-		"sRGB")
-			echo "Colour"
-			;;
-		"Colour")
-			echo "Colour"
-			;;
-		"Grayscale")
-			echo "Grayscale"
-			;;
 	esac
 }
 
