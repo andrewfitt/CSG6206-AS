@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 #	Workshop 2 (Week 2 assessment)
@@ -21,39 +20,56 @@
 
 
 imagesPath="../Workshop1/myfolder/misc/*"
-declare -A fileAndTypeList
-declare -A typeList
+declare -A -g fileAndTypeList
+declare -A -g typeList
+declare -g imagetype=""
 
-Grayscale="Gray"
-Colour="sRGB"
+
+declare -g Grayscale="Gray"
+declare -g Colour="sRGB"
 
 maxEntriesForTypes=0
 
 
 function grayOrColour() {
 	case $1 in
-		$Grayscale) echo Grayscale ;;
-		$Colour) echo Colour ;;
+		$Grayscale)
+			echo "Grayscale"
+			;;
+		$Colour)
+			echo "Colour"
+			;;
+		"Gray")
+			echo "Grayscale"
+			;;
+		"sRGB")
+			echo "Colour"
+			;;
+		"Colour")
+			echo "Colour"
+			;;
+		"Grayscale")
+			echo "Grayscale"
+			;;
 	esac
 }
 
 
+
 function readFileList() {
 	# @description Read files from global path into global variable array
-	# @TODO Will improve this to take a parameter and return an object if possible
 	for file in ${imagesPath}
 	do
 		IFS='/' read -r -a filevals <<< `identify -format "%t/%[colorspace]" ${file}`
 		imagetype=`grayOrColour ${filevals[1]}`
 		filename=${filevals[0]}
-		fileAndTypeList[${imagetype}]="${fileAndTypeList[${imagetype}]}/${filename}"
+		fileAndTypeList[${imagetype}]+="/${filename}"
 		typeList[${imagetype}]=$[typeList[${imagetype}]+1]
 	done
-
-	return
 }
 
-# Print our the variables
+
+# Print out the variables
 function printVars (){
 	echo "-=-=-=-==-=- Variables --=-=-=-=-=-=-=-=-"
 	for i in _ {a..z} {A..Z}; do
@@ -61,13 +77,12 @@ function printVars (){
 	      echo $var | grep type
 	   done
 	done
-	return
 }
 
 
 
-
-function listPrintout(){
+function listCount(){
+	# @description Count the entries in the lists of each type of colour space recorded
 	for i in ${typeList[@]}
 	do
 		if [ "$i" -gt "$maxEntriesForTypes" ];then
@@ -77,42 +92,47 @@ function listPrintout(){
 }
 
 
-
-# @desciption Build the dynamic lists for each type
-
-for j in "${!typeList[@]}"
-do
-	imagetype=`grayOrColour ${j}`
-	declare -g typelist_${imagetype}
-	temp=typelist_${imagetype}[@]
-	printf "%-15s" "$j"
-	IFS='/' read -r -a typelist_${imagetype} <<< `echo "${fileAndTypeList[${imagetype}]}"`
-done
+function buildTypeLists(){
+	# @description Create a new array for each type of colour space and assign filenames to the corresponding type
+	for j in "${!typeList[@]}"
+	do
+		declare -g typelist_${j}
+		IFS='/' read -r -a typelist_${j} <<< `eval echo ${fileAndTypeList[$j]}`
+	done
+}
 
 
+function printTypesAndFiles(){
+	# @description Output to standard out the arrays of each colour space with the files that correspond and format in columns
+	for j in "${!typeList[@]}"
+	do
+	printf "%-15s" $j
+	done
 
-for i in `seq 0 $[maxEntriesForTypes-1]`
-do
-	printf "%-15s%-15s\n" "${typelist_Color[$i]}" "${typelist_Grayscale[$i]}"
-#	for j in "${!typeList[@]}"
-#	do
-#		declare -a templist=typelist_$j[@]
-#		printf "[%-15s]" "${!templist[$i]}"
-#	done
-#	printf "\n"
-done
+	for i in `seq 0 $[maxEntriesForTypes-1]`
+	do
+		for j in "${!typeList[@]}"
+		do
+			eval tmpval='${typelist_'${j}'['${i}']}'
+			printf "%-15s" $tmpval
+		done
+		printf "\n"
+	done
+}
 
 
-
-
-
-
-
+#-=-=-=-=-=-=-   Call functions   -=-=-=-=-=-=-=-==-
 
 readFileList
-listPrintout
+
+listCount
+
+buildTypeLists
+
+printTypesAndFiles
+
+
 
 #printVars
 
-
-
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
