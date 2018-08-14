@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Workshop 2
+# Requirements:
+# 	Create a table output of the file list, two columns
+# 	Column one contains grayscale colourspace files
+# 	Column two contains colour colourspace fi
+# Delete the downloaded file
+# Output the progress in each step
+#
+
+

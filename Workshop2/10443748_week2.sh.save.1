@@ -1,0 +1,104 @@
+#!/bin/bash
+
+#	Workshop 2 (Week 2 assessment)
+#	Author: Andrew Fitt
+# 	Date: 7 August 2018
+#
+#
+#	Requirements
+#	From the list of files provided, output a table of files in each colourspace eg Colour and Grayscale
+#
+#	Must have:
+#		At least one function
+#		String processing to ensure the correct table output
+#		Correct column and row output and structure
+#
+#	Marking rubric includes:
+#		Use of one inbuilt command (bash or sh?)
+#		Use of a loop for counting
+#		Use an Array to store
+
+
+imagesPath="../Workshop1/myfolder/misc/*"
+declare -A fileAndTypeList
+declare -A typeList
+maxEntriesForTypes=0
+
+function readFileList() {
+	# @description Read files from global path into global variable array
+	# @TODO Will improve this to take a parameter and return an object if possible
+	for file in ${imagesPath}
+	do
+		IFS='/' read -r -a filevals <<< `identify -format "%t/%[type]" ${file}`
+		imagetype=${filevals[1]}
+		filename=${filevals[0]}
+		fileAndTypeList[${imagetype}]="${fileAndTypeList[${imagetype}]} ${filename}"
+		typeList[${imagetype}]=$[typeList[${imagetype}]+1]
+	done
+
+	return
+}
+
+
+
+readFileList
+
+
+
+for i in ${typeList[@]}
+do
+	if [ "$i" -gt "$maxEntriesForTypes" ];then
+		maxEntriesForTypes=$i
+	fi
+done
+
+
+
+# @desciption Build the dynamic lists for each type
+
+for j in "${!typeList[@]}"
+do
+	declare -g typelist_${j}
+	printf "%-20s" "$j"
+	IFS=' ' read -r -a typelist_${j} <<< `echo "${fileAndTypeList[${j}]}"`
+done
+
+
+
+printf "\n"
+
+echo "DEBUG: array=('d1=(v1 v2 v3)' 'd2=(v1 v2 v3)')
+for elt in "${array[@]}";do eval $elt;done
+echo "d1 ${#d1[@]} ${d1[@]}"
+echo "d2 ${#d2[@]} ${d2[@]}"
+
+
+for i in `seq 1 $maxEntriesForTypes`
+do
+	for j in "${!typeList[@]}"
+	do
+		templist=typelist_$j[@]
+		printf "%-20s" "${!templist[i-1]}"
+	done
+	printf "\n"
+done
+
+
+
+
+# Print our the variables
+
+echo "-=-=-=-==-=- Variables --=-=-=-=-=-=-=-=-"
+for i in _ {a..z} {A..Z}; do
+   for var in `eval echo "\\${!$i@}"`; do
+      echo $var | grep type
+      # you can test if $var matches some criteria and put it in the file or ignore
+   done
+done
+
+
+
+#	temparrayalias=typelist_$j[@]
+#	echo "DEBUG: Alias ${temparrayalias}"
+#	echo "DEBUG: Value ${!temparrayalias}"
+#	printf '%s ' "${!temparrayalias[@]}"

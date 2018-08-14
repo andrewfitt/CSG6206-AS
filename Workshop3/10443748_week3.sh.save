@@ -1,0 +1,84 @@
+#!/bin/bash
+
+declare db_location="./imageSizes.db"
+
+declare fileLocation=""
+
+declare -g filevals
+
+
+function initDB(){
+	if [ ! -f $db_location ]; then
+		echo "Creating table"
+		sqlite3 $db_location "create table filesAndSizes(filename TEXT PRIMARY KEY, filesize NUM);"
+		echo $?
+		if [[ $? -ne 0 ]]; then
+			exit $?
+		fi
+	fi
+}
+
+
+function insertDBRecord(){
+	sqlite3 $db_location "insert into filesAndSizes (filename,filesize) values ('${1}','${2}');"
+}
+
+
+function selectAllDBRecords(){
+	#	if [[ $? -eq 19 ]]; then
+#		echo "Record already exists"
+#	fi
+
+
+}
+
+
+
+
+#--------- Check Args ---------
+
+if [[ $# -eq 0 ]]; then
+	errorCode=1
+	echo "Error(${errorCode}): No argument provided"
+	echo "Syntax:"
+	echo "./10443748_week3 [filepath]"
+	exit $errorCode
+elif [[ $# -ne 1 ]] || [[ ! -d $1 ]]; then
+	errorCode=2
+	echo "Error(${errorCode}): Incorrect number of arguments or the location is not valid"
+	echo "Syntax:"
+	echo "./10443748_week3 [filepath]"
+	exit $errorCode
+else
+	fileLocation=$1
+	initDB
+fi
+
+
+
+
+
+
+#insertDBRecord "filename1" "filesize1"
+
+#echo $fileLocation
+
+for f in $fileLocation/*
+do
+	if [ -f "${f}" ];
+	then
+		filesize=`du --block-size=KB "${f}" | awk '{print $1}' | sed 's/kB//g'`
+		filename=`basename "${f}"`
+		echo "Filename: "$filename" Filesize: "$filesize
+		insertDBRecord "${filename}" "${filesize}"
+	fi
+done
+
+exit
+
+
+for line in `ls -1s --si --block-size=KB "${fileLocation}" | grep -v "^total"`
+do
+	print $line
+done
+
