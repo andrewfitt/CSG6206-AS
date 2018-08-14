@@ -1,0 +1,18 @@
+# initialise gray and colour arrays
+# initialise gray and colour array length counters
+
+# function output grayAndColourList()
+# param $1 Gray array
+# param $2 Colour array
+# variable graymaxlength equals length(gray)
+# variable graymaxlength equals length(colour)
+
+
+main script area
+# get path from variable or input param
+# For each file in the path
+#	use identify from imagemagick to determine if the colour space is Color or Gray
+#	Put file name in colour or gray array
+
+
+
