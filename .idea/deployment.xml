@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="Portfolio2">
+    <serverData>
+      <paths name="Portfolio2">
+        <serverdata>
+          <mappings>
+            <mapping deploy="Workshop7" local="$PROJECT_DIR$/Workshop7" web="Workshop7" />
+            <mapping />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
