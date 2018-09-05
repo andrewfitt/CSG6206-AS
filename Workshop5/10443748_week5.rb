@@ -8,12 +8,12 @@ require 'nokogiri'
 
 =begin
 	Workshop 5
-Scrape ALice in Wonderland Wikipedia page
+Scrape Alice in Wonderland Wikipedia page
 Filter out everything other than rendered Alphabet characters [a-zA-Z]
 Store the original page and the filtered text
 
 Author: Andrew Fitt
-Date: 22/8/2017
+Date: 22/8/2018
 CSG6206
 
 =end

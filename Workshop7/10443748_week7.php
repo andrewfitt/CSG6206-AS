@@ -1,30 +1,36 @@
 #!/usr/bin/php
 <?php
 
-// Syntax
-// The script takes a file input of text and outputs an html file with statistics of the input file
-// 10443748_week7.php [file_in] [file_out]
-
 /*
+Portfolio 2
+Workshop 7
+Process a text file for statistics and output the results in a html file
+
+Author: Andrew Fitt
+Date: 5/9/2018
+CSG6206.2018.2
+
+Syntax
+  The script takes a file input of text and outputs an html file with statistics of the input file
+  10443748_week7.php -i [file_in] -o [file_out]
+
+
 Statistics | Count
 Number of vowels | [num]
 Number of consonants | [num]
 Number of sentences | [num]
 Number of words | [num]
-\Hyphenated words are counted as separate words otherwise include \-.
-\Some "non-words are included such as heading numbers
 
-
-Two Colour Heatmap
+Two colour heat map of the [A-Z] characters present in the text file.
 Yellow to Green
-rgb(255,255,0) to rgb(0,160,0)
-Two values to Calc  using this:
-(Upper Value - Lower Value) / [how many steps left]
-count the number of steps by the max num uniq values in the [A-Z] sums
+rgb(255,255,30) to rgb(0,160,150)
 */
 
-define("rgbMin",serialize (array(0,255,0)));
-define("rgbMax",serialize (array(255,255,0)));
+error_reporting(E_ERROR);
+
+define("rgbMin",serialize (array(0,160,150)));
+define("rgbMax",serialize (array(255,255,30)));
+
 
 $htmlString = "<html><head>";
 $htmlStyle = <<<HTMLSTYLE
@@ -35,7 +41,12 @@ $htmlStyle = <<<HTMLSTYLE
     tr.statistics {background-color: orange;color: white;}
     ul.heatmap {display: grid;grid-template-columns: repeat(6, 50px);grid-gap: 2px;vertical-align: middle;}
     li.heatmap {grid-template-rows:repeat(5, 50px);background-color: grey;border-radius: 3px;padding: 20px;vertical-align: middle;font-size: 14px;list-style-type:none}
+    li.legend {height: 10px;list-style-type:none}
+    #legend {width: 150px;float: left;}
     td {border: 1px solid #dddddd;}
+    #wrapper {margin: 0 auto;width: 1000px;}
+    #content {float: left;width: 400px;padding-right: 50px;}
+    ul.legend {display: grid;grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));}
 </style>
 HTMLSTYLE;
 
@@ -45,10 +56,18 @@ $fileContents = "";
 $charCountArray = array();
 
 
-
-
 foreach (range('A', 'Z') as $c){
     $charCountArray[$c] = 0;
+}
+
+
+/*
+ * ***********Functions***********
+ */
+
+
+function incorrectSyntax() {
+  die("Error, incorrect syntax\n\n10443748_week7.php -i [file_in] -o [file_out]\n");
 }
 
 
@@ -58,10 +77,11 @@ function getArgs() {
 
     $options = getopt($cli_options);
 
+    if ($GLOBALS['argc']!=5 || count($options) != 2) {
+      incorrectSyntax();
+    }
     if (is_null($options["o"]) || is_null($options["i"])) {
-        echo "Error, incorrect syntax\n\n";
-        echo "10443748_week7.php -i [file_in] -o [file_out]\n";
-        exit(1);
+      incorrectSyntax();
     }
     else {
         $GLOBALS['fileIn'] = $options["i"];
@@ -75,6 +95,9 @@ function fileRead($fileIn) {
         if (file_exists($fileIn)) {
             $tempFile = file_get_contents($fileIn, false) or die('Unable to read the file: ' . $fileIn);
         }
+        else{
+          die('File '.$fileIn.' does not exist.');
+        }
         return $tempFile;
     }
     catch(Exception $e) {
@@ -84,13 +107,18 @@ function fileRead($fileIn) {
 
 function fileWrite($fileOut,$content) {
     try {
-        $file = fopen($fileOut, "w");
+      $file = fopen($fileOut, "w");
+      if($file==false){
+        die("Unable to create or write to the file ".$fileOut);
+      }
+      else {
         $byteCount = fwrite($file, $content);
         echo "Done\n".$byteCount." bytes written to file ".$fileOut;
         fclose($file);
+      }
     }
     catch(Exception $e) {
-        throw $e;
+
     }
 }
 
@@ -154,30 +182,42 @@ function alphaHeatMap($charArrayIn){
  * Round To Zero Decimal places (MinInt + ((MaxInt-MinInt) * (MinCharCount/MaxCharCount))
  */
 
-    $tmpNumOfChars = count($charArrayIn);
     $valArray = array();
     $rgbMin = unserialize(rgbMin);
     $rgbMax = unserialize(rgbMax);
-    $minChars = min($charArrayIn);
     $maxChars = max($charArrayIn);
 
 
-    $strOut ="<ul class='heatmap'>";
+    $strOut ="<div id='wrapper'><div id='content'><ul class='heatmap'>";
     $i=0;
     foreach ($charArrayIn as $char => $value) {
         $redVal = intval(round($rgbMin[0]+(($rgbMax[0]-$rgbMin[0])*($value/$maxChars)),0));
         $greenVal = intval(round($rgbMin[1]+(($rgbMax[1]-$rgbMin[1])*($value/$maxChars)),0));
         $blueVal = intval(round($rgbMin[2]+(($rgbMax[2]-$rgbMin[2])*($value/$maxChars)),0));
+        $valArray += array($value => array($char,"rgb(".$redVal.",".$greenVal.",".$blueVal.")"));
         $strOut.="<li class='heatmap' style='"."background-color: rgb(".$redVal.",".$greenVal.",".$blueVal.")'>".$char."</li>";
     }
-    $strOut.="</ul>";
+    krsort($valArray);
+    $strOut.="</ul></div>";
+    $strOut.="<div id='legend'>";
+    $strOut.="<ul class='legend'><li class='legend' style='height: 40px;width: 180px'>Highest to Lowest Character Occurrence</li>";
+    foreach ($valArray as $key => $rgb) {
+      $strOut.="<li class='legend' style='background-color: ".$rgb[1]."'></li>";
+    }
+    $strOut.="</ul></div></div>";
     return $strOut;
 }
 
+/*
+ * ************** Main code calls ******************
+ */
 
 
+getArgs();
 try {
-    getArgs();
+
+  //   Statistics Table Content
+
     $fileContents = fileRead($fileIn);
     $charCountArray = countLetters($fileContents);
     $wordCount = countWords($fileContents);
@@ -219,12 +259,15 @@ table1;
 
 
     $htmlString.="<br><br>";
-    //Include the Heat map html
+
+  //   Include the Heat map html
 
     $htmlString.=alphaHeatMap($charCountArray);
-    //close the html string
+
+  //   close the html string
     $htmlString.="</body></html>";
-    //write the html string to file
+
+  //write the html string to file
     fileWrite($fileOut,$htmlString);
 
 }
