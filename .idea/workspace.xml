@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="149fd83e-d878-4376-a56e-66514e5a320e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Workshop5/10443748_week5.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Workshop5/10443748_week5.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Workshop7/10443748_week7.php" beforeDir="false" afterPath="$PROJECT_DIR$/Workshop7/10443748_week7.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Workshop7/testOut.html" beforeDir="false" afterPath="$PROJECT_DIR$/Workshop7/testOut.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,7 +31,7 @@
     <session id="96862225">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.4" value="1" />
@@ -41,7 +43,7 @@
         <counts>
           <entry key="html" value="3" />
           <entry key="php" value="9" />
-          <entry key="rb" value="2" />
+          <entry key="rb" value="3" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
@@ -49,30 +51,32 @@
         <counts>
           <entry key="HTML" value="3" />
           <entry key="PHP" value="9" />
-          <entry key="PLAIN_TEXT" value="3" />
+          <entry key="PLAIN_TEXT" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="html" value="20" />
-          <entry key="php" value="6630" />
+          <entry key="php" value="7234" />
+          <entry key="rb" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="HTML" value="78" />
-          <entry key="PHP" value="6572" />
+          <entry key="PHP" value="7176" />
+          <entry key="PLAIN_TEXT" value="5" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Workshop7/10443748_week7.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="107">
-              <caret line="146" lean-forward="true" selection-start-line="146" selection-end-line="146" />
+            <state relative-caret-position="822">
+              <caret line="91" column="25" lean-forward="true" selection-start-line="91" selection-start-column="25" selection-end-line="91" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -82,6 +86,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="459">
               <caret line="27" column="7" lean-forward="true" selection-start-line="23" selection-end-line="44" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Workshop5/10443748_week5.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="886">
+              <caret line="61" column="16" lean-forward="true" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -99,6 +112,7 @@
         <option value="$PROJECT_DIR$/mytests/Rest.in.php" />
         <option value="$PROJECT_DIR$/mytests/api.php" />
         <option value="$PROJECT_DIR$/Workshop7/services.php" />
+        <option value="$PROJECT_DIR$/Workshop5/10443748_week5.rb" />
         <option value="$PROJECT_DIR$/Workshop7/10443748_week7.php" />
       </list>
     </option>
@@ -121,9 +135,10 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1384" />
-    <option name="width" value="2466" />
-    <option name="height" value="2111" />
+    <option name="x" value="850" />
+    <option name="y" value="76" />
+    <option name="width" value="1775" />
+    <option name="height" value="1959" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -137,6 +152,11 @@
             <path>
               <item name="CSG6206-AS" type="b2602c69:ProjectViewProjectNode" />
               <item name="CSG6206-AS" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CSG6206-AS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CSG6206-AS" type="462c0819:PsiDirectoryNode" />
+              <item name="Workshop5" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CSG6206-AS" type="b2602c69:ProjectViewProjectNode" />
@@ -208,7 +228,7 @@
       <workItem from="1535865234128" duration="8267000" />
       <workItem from="1535953968384" duration="14670000" />
       <workItem from="1536016110887" duration="5820000" />
-      <workItem from="1536062043848" duration="23209000" />
+      <workItem from="1536062043848" duration="27277000" />
     </task>
     <servers>
       <GitHub url="https://github.com">
@@ -219,14 +239,13 @@
     </servers>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51966000" />
+    <option name="totallyTimeSpent" value="56034000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="923" y="0" width="1644" height="1407" extended-state="0" />
-    <editor active="true" />
+    <frame x="567" y="51" width="1183" height="1306" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4976452" visible="true" weight="0.19318181" />
-      <window_info active="true" id="Structure" order="1" sideWeight="0.5023548" side_tool="true" visible="true" weight="0.19318181" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4970162" weight="0.27248442" />
+      <window_info id="Structure" order="1" sideWeight="0.5029838" side_tool="true" weight="0.27248442" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -247,6 +266,29 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" weight="0.3298217" />
     </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4970162" visible="true" weight="0.27248442" />
+      <window_info id="Structure" order="1" sideWeight="0.5029838" side_tool="true" visible="true" weight="0.27248442" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.510989" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.26046985" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Tail" order="7" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="9" />
+      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="11" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
+      <window_info anchor="bottom" id="File Transfer" order="13" weight="0.32967034" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" weight="0.3298217" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -272,13 +314,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Workshop5/10443748_week5.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1037">
-          <caret line="61" selection-start-line="61" selection-end-line="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Workshop7/services.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -298,8 +333,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Workshop7/10443748_week7.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="146" lean-forward="true" selection-start-line="146" selection-end-line="146" />
+        <state relative-caret-position="822">
+          <caret line="91" column="25" lean-forward="true" selection-start-line="91" selection-start-column="25" selection-end-line="91" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Workshop5/10443748_week5.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="886">
+          <caret line="61" column="16" lean-forward="true" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="16" />
         </state>
       </provider>
     </entry>

@@ -20,13 +20,8 @@ CSG6206
 
 
 
-
-
-
 @out_filename = 'AiW.txt'
 @final_filename = 'finalFile.out'
-
-
 
 
 url="https://en.wikipedia.org/wiki/Alice%27s_Adventures_in_Wonderland"

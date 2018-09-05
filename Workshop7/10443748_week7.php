@@ -23,8 +23,8 @@ Two values to Calc  using this:
 count the number of steps by the max num uniq values in the [A-Z] sums
 */
 
-define("rgbMin",array(0,255,0));
-define("rgbMax",array(255,255,0));
+define("rgbMin",serialize (array(0,255,0)));
+define("rgbMax",serialize (array(255,255,0)));
 
 $htmlString = "<html><head>";
 $htmlStyle = <<<HTMLSTYLE
@@ -85,7 +85,8 @@ function fileRead($fileIn) {
 function fileWrite($fileOut,$content) {
     try {
         $file = fopen($fileOut, "w");
-        echo "bytes written to file " . $fileOut . " : " . fwrite($file, $content);
+        $byteCount = fwrite($file, $content);
+        echo "Done\n".$byteCount." bytes written to file ".$fileOut;
         fclose($file);
     }
     catch(Exception $e) {
@@ -155,19 +156,19 @@ function alphaHeatMap($charArrayIn){
 
     $tmpNumOfChars = count($charArrayIn);
     $valArray = array();
-    #echo "Min: ".min($charArrayIn);
-    #echo "Max: ".max($charArrayIn);
-    foreach ($charArrayIn as $i){
-
-        $valArray[] = $i;
-    }
-
+    $rgbMin = unserialize(rgbMin);
+    $rgbMax = unserialize(rgbMax);
+    $minChars = min($charArrayIn);
+    $maxChars = max($charArrayIn);
 
 
     $strOut ="<ul class='heatmap'>";
     $i=0;
     foreach ($charArrayIn as $char => $value) {
-        $strOut.="<li class='heatmap'>".$char."</li>";
+        $redVal = intval(round($rgbMin[0]+(($rgbMax[0]-$rgbMin[0])*($value/$maxChars)),0));
+        $greenVal = intval(round($rgbMin[1]+(($rgbMax[1]-$rgbMin[1])*($value/$maxChars)),0));
+        $blueVal = intval(round($rgbMin[2]+(($rgbMax[2]-$rgbMin[2])*($value/$maxChars)),0));
+        $strOut.="<li class='heatmap' style='"."background-color: rgb(".$redVal.",".$greenVal.",".$blueVal.")'>".$char."</li>";
     }
     $strOut.="</ul>";
     return $strOut;
@@ -219,6 +220,7 @@ table1;
 
     $htmlString.="<br><br>";
     //Include the Heat map html
+
     $htmlString.=alphaHeatMap($charCountArray);
     //close the html string
     $htmlString.="</body></html>";
