@@ -1,0 +1,33 @@
+SQLite Database on the server
+	Name: chatter.sqlite
+	Tables:
+		connections{id, nickname, ip_address, connect_date, connect_time, disconnect_date, disconenct_time}
+		messages{id, nickname,message, date, time}
+
+		
+Server Module
+Name: server.lua
+
+Note to self: Put a debug option on commandline if possible
+
+Syntax:
+	server.lua
+
+	
+
+	
+	
+Client Validation rules:
+[nickname] and [ipaddress:port]
+message strings help
+terminated with a carriage return
+
+Reserved nickname "server" (any variation of case)
+Nickname can only be one word without spaces and must be comprised of [a-z]
+
+Messages can only be strings of ascii [a-zA-Z0-9!? -_,.]
+
+
+
+Server Validation rules:
+If a nickname already exists then say so to the client and reject the connection
