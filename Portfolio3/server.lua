@@ -1,22 +1,94 @@
 #!/usr/bin/lua5.3
 --------------------------------------------------------------------------------------------
 -- LuaRocks Dependencies
-
--- luarocks install luasocket
--- luarocks install sqlite3
--- luarocks install md5
+--
+-- Socket connectivity 
+--    luarocks install luasocket
+-- SQLite DB for logging
+--    luarocks install sqlite3
+-- MD5 for unique connection identifier
+--    luarocks install md5
+-- Copas for the handling of (psuedo) non-blocking IO on the socket handling (coroutine based)
+--    luarocks install copas
 --------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------
 -- Global Require Statements
 
 socket = require'socket'
+copas = require'copas'
 md5 = require'md5'
 
 --------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------
--- Function: genConnectionID
+-- Function: validateCLIArgs
+-- Validate that the commandline arguments are valid and if not terminate cleanly with the
+-- syntax expectations.  Return error code 1 for fail and 0 for success
+-- @param arg
+-- @return 1
+----------------------------------------------------------------------------------------------
+function errorHandler(err)
+	print("Error: "..err)
+	return 1
+end
+----------------------------------------------------------------------------------------------
+
+
+
+
+
+--------------------------------------------------------------------------------------------
+-- Function: errorHandler
+-- Record errors to STDOUT and return an status code 1
+-- @param err
+-- @return 1
+----------------------------------------------------------------------------------------------
+function errorHandler(err)
+	print("Error: "..err)
+	return 1
+end
+----------------------------------------------------------------------------------------------
+
+
+
+
+
+--------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------
+-- Function: createListener
+-- Create a socket listener and hand off to handler with connection "threading"
+-- Default handler is for chat clients.  Option to include server admin handlers etc
+-- Listens on all available host interfaces "0.0.0.0" TCPV4
+-- @param s_port, handler
+----------------------------------------------------------------------------------------------
+function startServer(s_port,handler)
+
+
+end
+----------------------------------------------------------------------------------------------
+
+
+
+
+--------------------------------------------------------------------------------------------
+-- Function: getSQLiteDBHandle
+-- Generate a uniqueID for the connection using MD5 hash in hex
+-- @param ip_address nickname
+-- @return md5_sum_hex
+----------------------------------------------------------------------------------------------
+--function
+
+
+----------------------------------------------------------------------------------------------
+
+
+
+
+
+--------------------------------------------------------------------------------------------
+-- Function: genClientUID
 -- Generate a uniqueID for the connection using MD5 hash in hex
 -- @param ip_address nickname
 -- @return md5_sum_hex
