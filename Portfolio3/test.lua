@@ -6,8 +6,9 @@ copas = require'copas'
 connections = {}
 
 
-function addClient(nickname)
-	connections = connections + nickname
+function addClient(nickname,clientUID)
+	if(
+
 end
 
 
