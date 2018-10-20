@@ -33,9 +33,9 @@ local function simple(host, port, handler)
 end
 
 
-function addClient(inputstring,c)
+function addClient(inputstring,c_ip,c)
 	local nickname = getNickname(inputstring)
-	clientList[nickname] = {genClientUID(c:getpeername()[2],nickname),c}
+	clientList[nickname] = {genClientUID(c_ip,nickname),c}
 	for clientname, tbl in pairs(clientList) do
 		if(c ~= tbl[2]) then
 			tbl[2]:send(nickname.." joined the chat\n")
@@ -45,6 +45,7 @@ function addClient(inputstring,c)
 end
 
 function removeClient(nickname)
+	local conenction = clientList[nickname][2]
 	clientList[nickname] = nil
 end
 

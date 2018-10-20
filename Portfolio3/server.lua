@@ -37,17 +37,30 @@ clientList = {}
 -- Function: validateCLIArgs
 -- Validate that the commandline arguments are valid and if not terminate cleanly with the
 -- syntax expectations.  Return error code 1 for fail and 0 for success
+-- Output to STDOUT the correct syntax for the application
 -- @param arg
--- @return 1
+-- @return 1 or 0
 ----------------------------------------------------------------------------------------------
-function errorHandler(err)
-	print("Error: "..err)
-	return 1
+function validateCLIArgs(arg)
+	for i in arg do
+		print("Arg: "..tostring(i))
+	end
+	return 0 -- if ok
 end
 ----------------------------------------------------------------------------------------------
 
 
-
+--------------------------------------------------------------------------------------------
+-- Function: genClientUID
+-- Generate a uniqueID for the connection using MD5 hash in hex
+-- @param ip_address nickname
+-- @return md5_sum_hex
+----------------------------------------------------------------------------------------------
+function genClientUID(c_ip,nickname)
+	local val = tostring(c_ip)..tostring(nickname)..tostring(socket.gettime())
+	return md5.sumhexa(val) -- return an md5 hex value for the connection ID
+end
+----------------------------------------------------------------------------------------------
 
 
 --------------------------------------------------------------------------------------------
@@ -73,9 +86,9 @@ end
 -- @param s_port, handler
 ----------------------------------------------------------------------------------------------
 function startServer(s_port,handler)
-    return copas.addserver(assert(socket.bind("*", s_port)),
-        function(c)
-            return handler(copas.wrap(c), c:getpeername())
+	copas.setErrorHandler(errorHandler)
+	return copas.addserver(assert(socket.bind("*", s_port)),
+        	function(c) return handler(copas.wrap(c)) -- Accept the incoming TCP connection
         end)
 end
 ----------------------------------------------------------------------------------------------
@@ -83,29 +96,26 @@ end
 
 
 --------------------------------------------------------------------------------------------
--- Function: createListener
--- Create a socket listener and hand off to handler with connection "threading"
--- Default handler is for chat clients.  Option to include server admin handlers etc
--- Listens on all available host interfaces "0.0.0.0" TCPV4
--- @param s_port, handler
+-- Function: chatClientHandler
+-- Create a chat with the incoming tcp connection from the server listener
+-- Manages the client chat communications and processes.  Takes the client object as input
+-- @param c
 ----------------------------------------------------------------------------------------------
-local function chat_client_handler(c, host, port)
-    local peer = host .. ":" .. port
-    print("example connection from", peer)
-	nickname = addClient(c:receive"*l",host,c) -- First line is the nickname
-	print("get nick Status: "..nickname,clientList["nickname"])
+local function chatClientHandler(c)
 
-    c:send("Hello "..nickname.."\n")
+	nickname = addClient(c:receive"*l",c) -- First line received is the nickname
+	logConnection(nickname,c:getpeername())
+
+	c:send("Hello "..nickname.."\n".."Enter message: ")
 	while true do
 	   cdata = c:receive"*l"
+	   c:send("Enter message: ")
 	   if (string.lower(cdata) == "#users") then c:send(getUsers()) end
-	   if ((cdata == nil) or (cdata == "quit")) then
+	   if ((cdata == nil) or (cdata == "#quit")) then
 		removeClient(nickname)
 		break
 	   end -- if
-	   print("data from", peer, cdata)
 	end -- while
-    print("example termination from", peer)
 end
 
 
@@ -125,30 +135,19 @@ end
 
 
 
---------------------------------------------------------------------------------------------
--- Function: genClientUID
--- Generate a uniqueID for the connection using MD5 hash in hex
--- @param ip_address nickname
--- @return md5_sum_hex
-----------------------------------------------------------------------------------------------
-function genClientUID(c_ip,nickname)
-	local val = tostring(c_ip)..tostring(nickname)..tostring(socket.gettime())
-	return md5.sumhexa(val) -- return an md5 hex value for the connection ID
-end
-----------------------------------------------------------------------------------------------
+
 
 
 ----------------------------------------------------------------------------------------------
 -- Function: logConnection
 -- Log the connection of a client specifying inputs
--- @param id, nickname, ipaddress, date, time
+-- @param nickname, c_ipaddr,c_host
 -- @return boolean
 ----------------------------------------------------------------------------------------------
-function logConnection(id,nickname,ip_addr)
+function logConnection(nickname,c_ipaddr,c_host, )
 	local date = os.date("%d/%m/%Y")
 	local time = os.date("%H:%M")
-
-	print(id, nickname, ip_addr, date, time)
+	print(">> "..nickname.." connected from "..tostring(c_ipaddr).." at "..date.." "..time)
 	return true
 end
 ----------------------------------------------------------------------------------------------
@@ -157,15 +156,12 @@ end
 
 ----------------------------------------------------------------------------------------------
 -- Function: logDisconnect
--- Log the disconnection of a client specifying the ID
--- @param id
+-- Log the disconnection of a client specifying the nickname
+-- @param nickname
 -- @return boolean
 ----------------------------------------------------------------------------------------------
-function logDisconnect(id)
-	local date = os.date("%d/%m/%Y")
-	local time = os.date("%H:%M")
-
-	print(id, date, time)
+function logDisconnect(nickname,time)
+	print("<< "..nickname.." disconnected at "..time)
 	return true
 end
 ----------------------------------------------------------------------------------------------
