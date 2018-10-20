@@ -18,8 +18,20 @@
 socket = require'socket'
 copas = require'copas'
 md5 = require'md5'
+--------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------
+-- Global Variables
+
+
+--Client Connection Table
+clientList = {}
+
+
+--------------------------------------------------------------------------------------------
+
+
+
 
 --------------------------------------------------------------------------------------------
 -- Function: validateCLIArgs
@@ -53,9 +65,6 @@ end
 
 
 
-
---------------------------------------------------------------------------------------------
-
 --------------------------------------------------------------------------------------------
 -- Function: createListener
 -- Create a socket listener and hand off to handler with connection "threading"
@@ -64,10 +73,41 @@ end
 -- @param s_port, handler
 ----------------------------------------------------------------------------------------------
 function startServer(s_port,handler)
-
-
+    return copas.addserver(assert(socket.bind("*", s_port)),
+        function(c)
+            return handler(copas.wrap(c), c:getpeername())
+        end)
 end
 ----------------------------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------------------------------------------
+-- Function: createListener
+-- Create a socket listener and hand off to handler with connection "threading"
+-- Default handler is for chat clients.  Option to include server admin handlers etc
+-- Listens on all available host interfaces "0.0.0.0" TCPV4
+-- @param s_port, handler
+----------------------------------------------------------------------------------------------
+local function chat_client_handler(c, host, port)
+    local peer = host .. ":" .. port
+    print("example connection from", peer)
+	nickname = addClient(c:receive"*l",host,c) -- First line is the nickname
+	print("get nick Status: "..nickname,clientList["nickname"])
+
+    c:send("Hello "..nickname.."\n")
+	while true do
+	   cdata = c:receive"*l"
+	   if (string.lower(cdata) == "#users") then c:send(getUsers()) end
+	   if ((cdata == nil) or (cdata == "quit")) then
+		removeClient(nickname)
+		break
+	   end -- if
+	   print("data from", peer, cdata)
+	end -- while
+    print("example termination from", peer)
+end
+
 
 
 
@@ -85,16 +125,14 @@ end
 
 
 
-
-
 --------------------------------------------------------------------------------------------
 -- Function: genClientUID
 -- Generate a uniqueID for the connection using MD5 hash in hex
 -- @param ip_address nickname
 -- @return md5_sum_hex
 ----------------------------------------------------------------------------------------------
-function genConnectionID(ip,nickname)
-	local val = ip..nickname..socket.gettime() --concatenate ip, nickname and timestamp
+function genClientUID(c_ip,nickname)
+	local val = tostring(c_ip)..tostring(nickname)..tostring(socket.gettime())
 	return md5.sumhexa(val) -- return an md5 hex value for the connection ID
 end
 ----------------------------------------------------------------------------------------------
