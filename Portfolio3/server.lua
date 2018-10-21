@@ -18,6 +18,7 @@
 socket = require'socket'
 copas = require'copas'
 md5 = require'md5'
+sqlite3 = require'sqlite3'
 --------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------
@@ -26,13 +27,36 @@ md5 = require'md5'
 
 --Client Connection Table
 clientList = {}
+
+--Chat Server Params
 chatServerPort = ""
 chatServerIPAddress = "*"
+
+--SQLite3 DB Filename
+sqliteFilename = "./chatter.sqlite"
 
 
 --------------------------------------------------------------------------------------------
 
-
+--------------------------------------------------------------------------------------------
+-- Function: initDB
+-- Create DB file and tables if they don't alread exist
+-- Return status code 1 for fail and 0 for success
+-- @param dbfilename
+-- @return 0 or 1
+----------------------------------------------------------------------------------------------
+function initDB()
+	db = sqlite3.open(sqliteFilename)
+	db:exec[[
+		CREATE TABLE connections (id PRIMARY KEY,nickname,ip_address,src_port,connect_date,connect_time,disconnect_date, disconnect_time);
+		CREATE TABLE messages (id NOT NULL, nickname, message, msg_date, msg_time);
+	]]
+	db_insert_connection = assert( db:prepare("INSERT INTO connections VALUES (?, ?, ?, ?, ?, ?,NULL,NULL);COMMIT;") )
+	db_update_connection = assert( db:prepare("UPDATE connections SET disconnect_date=?, disconnect_time=? WHERE id=? and nickname=?;COMMIT;") )
+	db_insert_message = assert( db:prepare("INSERT INTO messages VALUES (?, ?, ?, ?, ?);COMMIT;") )
+	return 0
+end
+--------------------------------------------------------------------------------------------
 
 
 --------------------------------------------------------------------------------------------
@@ -91,19 +115,19 @@ end
 -- Function: addClient
 -- Adds the client connection to the client list.  If the nickname alread exists, reject the
 -- notify the client and reject the connection.
--- @param inputstring (expecting nickname),c_port, c (connection object)
--- @return 1
+-- @param nickname,c_host,c_port, c (connection object)
+-- @return 0
 ----------------------------------------------------------------------------------------------
-function addClient(nickname,c_port,c)
-	clientList[nickname] = {genClientUID(c_port,nickname),c}
---[[ removing until i can work out how not to stomp on the client prompt (might just be telnet)
+function addClient(nickname,c_host,c_port,c)
+	clientUID = genClientUID(c_port,nickname)
+	clientList[nickname] = {clientUID,c}
+	logConnection(clientUID,nickname,c_host,c_port)
 	for clientname, tbl in pairs(clientList) do
 		if(c ~= tbl[2]) then
 			tbl[2]:send(nickname.." joined the chat\n") -- tell everyone that a new user has joined
 		end
 	end
---]]
-	return nickname
+	return 0
 end
 ----------------------------------------------------------------------------------------------
 
@@ -230,12 +254,13 @@ local function chatClientHandler(c)
 		return
 	end
 	local c_host,c_port,inet_if = c:getpeername()
-	nickname = addClient(nickname,c_port,c)
-	logConnection(nickname,c_host, c_port)
+	local resp = addClient(nickname,c_host,c_port,c)
 	c:send("Hello "..nickname.."\n".."Enter message: ")
 	while true do
 		cdata = c:receive"*l"
-		logMsg(nickname,cdata)
+		if(cdata ~= nil) then
+			logMsg(nickname,cdata)
+		end
 		if ((cdata == nil) or (cdata == "#quit"))   		--[[ Client #quit or connection closed--]]
 		then
 			logDisconnect(nickname)
@@ -292,6 +317,9 @@ end
 function logMsg(nickname, msg)
 	local date = os.date("%d/%m/%Y")
 	local time = os.date("%H:%M")
+	clientUID, clientconn, getUserErr = getClientDetails(nickname)
+	db_insert_message:bind(clientUID,nickname,msg,date,time)
+	db_insert_message:exec()
 	print("["..nickname.."]: "..msg)
 	return 0
 end
@@ -299,34 +327,18 @@ end
 
 
 
-
-
-----------------------------------------------------------------------------------------------
--- Function: getSQLiteDBHandle
--- Generate a uniqueID for the connection using MD5 hash in hex
--- @param ip_address nickname
--- @return md5_sum_hex
-----------------------------------------------------------------------------------------------
---function
-
-
-----------------------------------------------------------------------------------------------
-
-
-
-
-
-
 ----------------------------------------------------------------------------------------------
 -- Function: logConnection
 -- Log the connection of a client specifying inputs
--- @param nickname, c_ipaddr,c_host
+-- @param clientUID,nickname, c_host,c_port
 -- @return 0 or 1
 ----------------------------------------------------------------------------------------------
-function logConnection(nickname,c_ipaddr,c_host)
+function logConnection(clientUID,nickname,c_host,c_port)
 	local date = os.date("%d/%m/%Y")
 	local time = os.date("%H:%M")
-	print(">> "..nickname.." connected from "..tostring(c_ipaddr).." at "..date.." "..time)
+	db_insert_connection:bind(clientUID, nickname, c_host, c_port, date, time)
+	db_insert_connection:exec()
+	print(">> "..nickname.." connected from "..tostring(c_host).." at "..date.." "..time)
 	return 0
 end
 ----------------------------------------------------------------------------------------------
@@ -342,6 +354,8 @@ end
 function logDisconnect(nickname)
 	local date = os.date("%d/%m/%Y")
 	local time = os.date("%H:%M")
+	db_update_connection:bind(date, time,clientUID, nickname)
+	db_update_connection:exec()
 	print("<< "..nickname.." disconnected at "..time)
 	return 0
 end
@@ -351,7 +365,7 @@ end
 ----- MAIN -------
 
 if(validateCLIArgs()==1) then return end
-
+initDB()
 function startSrv() startServer(chatServerPort, chatClientHandler) end
 
 status = xpcall(startSrv,errorHandler)
