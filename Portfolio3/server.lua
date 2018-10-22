@@ -69,15 +69,16 @@ end
 -- @return 0 or 1
 ----------------------------------------------------------------------------------------------
 function validateCLIArgs(...)
-	
-	origArg1 = arg[1]
-	chatServerPort = string.match(arg[1],"%d+")
-	if(chatServerPort and origArg1)
-	then
-		if((string.len(origArg1) == string.len(chatServerPort)) and (tonumber(chatServerPort)>=1024) and (tonumber(chatServerPort)<=65535))
+	if(arg[1]) then
+		origArg1 = arg[1]
+		chatServerPort = string.match(arg[1],"%d+")
+		if(chatServerPort and origArg1)
 		then
-			-- print("Valid port number: "..chatServerPort)
-			return 0
+			if((string.len(origArg1) == string.len(chatServerPort)) and (tonumber(chatServerPort)>=1024) and (tonumber(chatServerPort)<=65535))
+			then
+				-- print("Valid port number: "..chatServerPort)
+				return 0
+			end
 		end
 	end
 	print("Syntax error")
