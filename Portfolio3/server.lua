@@ -209,6 +209,7 @@ end
 ----------------------------------------------------------------------------------------------
 function startServer(s_port,handler)
 	local s_host = chatServerIPAddress
+	
 	local skt = assert(socket.bind(s_host, s_port))
 	copasServerObj = copas.addserver(skt, 
 		function(c) 
@@ -234,7 +235,6 @@ end
 local function chatClientHandler(c)
 	local msg = ""
 	local s_ipaddr,s_port = c:getsockname()
-	c:send("Connected to server "..s_ipaddr..":"..s_port.."\n")
 	inputstring = c:receive"*l"
 	local nickname, err = getNickname(inputstring)	 -- First line received is the nickname
 	if((err == 1) and (nickname ~= nil) and (nickname ~= ""))
@@ -256,7 +256,6 @@ local function chatClientHandler(c)
 	end
 	local c_host,c_port,inet_if = c:getpeername()
 	local resp = addClient(nickname,c_host,c_port,c)
-	c:send("Hello "..nickname.."\n".."Enter message: ")
 	while true do
 		cdata = c:receive"*l"
 		if(cdata ~= nil) then
@@ -271,8 +270,7 @@ local function chatClientHandler(c)
 		if(string.lower(cdata) == "#users")			--[[List #users Command--]]
 		then
 			c:send(getUsers())
-		end
-		if((string.char(string.byte(cdata)) == "@") and (string.match(cdata,"%a+") ~= nil) and (string.match(cdata,"%a+") ~= ""))	--[[Send to specific client--]]
+		elseif ((string.char(string.byte(cdata)) == "@") and (string.match(cdata,"%a+") ~= nil) and (string.match(cdata,"%a+") ~= ""))	--[[Send to specific client--]]
 		then
 			tgt_nickname, msg = string.match(cdata,"(%a+)%s*(.*)")
 			tgt_nickname = string.lower(tgt_nickname)
@@ -302,7 +300,6 @@ local function chatClientHandler(c)
 			end
 
 		end 							--[[if message transmission to user or group--]]
-		c:send("Enter message: ")
 	end
 end
 ----------------------------------------------------------------------------------------------
