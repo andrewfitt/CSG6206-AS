@@ -46,12 +46,12 @@ function isIPAddress(ipAddr_str)
 				return 0
 			end
 		else
-			return 0
+			return 1
 		end
 	else
-		return 0
+		return 1
 	end
-	return 1
+	return 
 end
 --------------------------------------------------------------------------------------------
 
@@ -114,6 +114,8 @@ function validateCLIArgs(...)
 		print("Usage: client.lua [nickname] [server IP address] [server port]" )
 		print("Example: client.lua john 127.0.0.1 10000")
 		return 1
+	else
+		return 0
 	end
 end
 ----------------------------------------------------------------------------------------------
@@ -185,5 +187,6 @@ function getInputFromUser()
 end
 ----------------------------------------------------------------------------------------------
 
-validateCLIArgs()
-connectToServer(arg[1],arg[2],arg[3])
+if(validateCLIArgs() == 0) then
+	connectToServer(arg[1],arg[2],arg[3])
+end

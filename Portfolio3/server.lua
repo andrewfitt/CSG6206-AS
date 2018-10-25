@@ -109,6 +109,7 @@ end
 ----------------------------------------------------------------------------------------------
 function removeClient(nickname)
 	clientList[nickname] = nil
+	return 0
 end
 ----------------------------------------------------------------------------------------------
 
@@ -310,7 +311,7 @@ end
 -- Function: logMsg
 -- Create a DB entry for the message sent by the client and write to STDOUT
 -- @param nickname, msg
--- @return 0 or 1
+-- @return 0
 ----------------------------------------------------------------------------------------------
 function logMsg(nickname, msg)
 	local date = os.date("%d/%m/%Y")
@@ -347,7 +348,7 @@ end
 -- Function: logDisconnect
 -- Log the disconnection of a client specifying the nickname
 -- @param nickname
--- @return 0 or 1
+-- @return 0
 ----------------------------------------------------------------------------------------------
 function logDisconnect(nickname)
 	local date = os.date("%d/%m/%Y")
