@@ -1,0 +1,15 @@
+E:\Git\CSG6206-AS\Workshop5>ruby 10443748_week5.rb
+Unable to connect to: https://127.0.0.1:8080/wiki/Alice%27s_Adventures_in_Wonderland
+
+E:\Git\CSG6206-AS\Workshop5>ruby 10443748_week5.rb
+Unable to establish SSL connection to: https://127.0.0.1/wiki/Alice%27s_Adventures_in_Wonderland
+
+E:\Git\CSG6206-AS\Workshop5>ruby 10443748_week5.rb
+No such file or directory @ rb_sysopen - q:\original_page.txt
+
+E:\Git\CSG6206-AS\Workshop5>ruby 10443748_week5.rb
+Insufficient permission or access to file.  It may be open or marked as read only
+Permission denied @ rb_sysopen - original_page.txt
+
+E:\Git\CSG6206-AS\Workshop5>ruby 10443748_week5.rb
+Done: Written files original_page.txt and processedPage.txt

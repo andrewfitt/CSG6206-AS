@@ -1,0 +1,65 @@
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php
+Error, incorrect syntax
+
+10443748_week7.php -i [file_in] -o [file_out]
+
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php testIn.txt testOut.txt
+Error, incorrect syntax
+
+10443748_week7.php -i [file_in] -o [file_out]
+
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php testIn.txt -o testOut.txt
+Error, incorrect syntax
+
+10443748_week7.php -i [file_in] -o [file_out]
+
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php -i testIn.txt -o testOut.txt
+File testIn.txt does not exist.
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php -i 19033.txt o testOut.html
+Error, incorrect syntax
+
+10443748_week7.php -i [file_in] -o [file_out]
+
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php -i 19033.txt o q:\testOut.html
+Error, incorrect syntax
+
+10443748_week7.php -i [file_in] -o [file_out]
+
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php -i 19033.txt -o q:\testOut.html
+Unable to create or write to the file q:\testOut.html
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php -i q:\19033.txt -o q:\testOut.html
+File q:\19033.txt does not exist.
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php -i 19033.txt -o testOut.html
+Done
+5087 bytes written to file testOut.html
+
+
+
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php -i 19033.txt -o testOut.html -o testOut.html
+Error, incorrect syntax
+
+10443748_week7.php -i [file_in] -o [file_out]
+
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php -i 19033.txt -i 19033.txt -o testOut.html -o testOut.html
+Error, incorrect syntax
+
+10443748_week7.php -i [file_in] -o [file_out]
+
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php -i 19033.txt -i 19033.txt -o testOut.html
+Error, incorrect syntax
+
+10443748_week7.php -i [file_in] -o [file_out]
+
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php -i 19033.txt --i 19033.txt -o testOut.html
+Error, incorrect syntax
+
+10443748_week7.php -i [file_in] -o [file_out]
+
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php --i 19033.txt -o testOut.html
+Error, incorrect syntax
+
+10443748_week7.php -i [file_in] -o [file_out]
+
+E:\Git\CSG6206-AS\Workshop7>php 10443748_week7.php -i 19033.txt -o testOut.html
+Done
+5087 bytes written to file testOut.html
